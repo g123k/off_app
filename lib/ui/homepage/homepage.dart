@@ -2,6 +2,7 @@ import 'package:betclic_app/res/app_colors.dart';
 import 'package:betclic_app/res/app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -50,7 +51,12 @@ class Homepage extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: height * 0.1),
-                    MyButton(label: 'Commencer'),
+                    MyButton(
+                      label: 'Commencer',
+                      onPressed: () {
+                        GoRouter.of(context).push('/product?barcode=123');
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -64,9 +70,10 @@ class Homepage extends StatelessWidget {
 }
 
 class MyButton extends StatelessWidget {
-  const MyButton({required this.label, super.key});
+  const MyButton({required this.label, required this.onPressed, super.key});
 
   final String label;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +85,7 @@ class MyButton extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(22.0)),
         ),
       ),
-      onPressed: () {},
+      onPressed: onPressed,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

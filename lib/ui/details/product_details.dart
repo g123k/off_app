@@ -6,7 +6,9 @@ import 'package:betclic_app/ui/details/product_tab3.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetails extends StatefulWidget {
-  const ProductDetails({super.key});
+  const ProductDetails({required this.barcode, super.key});
+
+  final String barcode;
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();

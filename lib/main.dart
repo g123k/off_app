@@ -1,19 +1,41 @@
 import 'package:betclic_app/res/app_colors.dart';
 import 'package:betclic_app/style.dart';
 import 'package:betclic_app/ui/details/product_details.dart';
+import 'package:betclic_app/ui/homepage/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
+GoRouter _router = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, _) {
+        return Homepage();
+      },
+      routes: [
+        GoRoute(
+          path: 'product',
+          builder: (BuildContext context, GoRouterState state) {
+            final String? barcode = state.uri.queryParameters['barcode'];
+            assert(barcode?.isNotEmpty == true);
+            return ProductDetails(barcode: barcode!);
+          },
+        ),
+      ],
+    ),
+  ],
+);
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -34,7 +56,7 @@ class MyApp extends StatelessWidget {
           indicatorColor: AppColors.blue,
         ),
       ),
-      home: const ProductDetails(),
+      routerConfig: _router,
     );
   }
 }
