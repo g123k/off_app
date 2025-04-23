@@ -12,21 +12,25 @@ class OffThemeExtension extends ThemeExtension<OffThemeExtension> {
   OffThemeExtension.defaultValues()
     : title1 = TextStyle(
         color: AppColors.blueDark,
+        fontFamily: 'Avenir',
         fontSize: 20.0,
         fontWeight: FontWeight.bold,
       ),
       title2 = TextStyle(
         color: AppColors.gray2,
+        fontFamily: 'Avenir',
         fontSize: 18.0,
         fontWeight: FontWeight.w500,
       ),
       title3 = TextStyle(
         color: AppColors.blueDark,
+        fontFamily: 'Avenir',
         fontSize: 16.0,
         fontWeight: FontWeight.w600,
       ),
       altText = TextStyle(
         color: AppColors.gray2,
+        fontFamily: 'Avenir',
         fontSize: 15.0,
         fontWeight: FontWeight.normal,
       );

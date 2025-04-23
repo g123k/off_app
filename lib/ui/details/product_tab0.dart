@@ -3,6 +3,7 @@ import 'package:betclic_app/res/app_colors.dart';
 import 'package:betclic_app/res/app_icons.dart';
 import 'package:betclic_app/style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductTab0 extends StatefulWidget {
   static const double kImageHeight = 300.0;
@@ -34,29 +35,36 @@ class _ProductTab0State extends State<ProductTab0> {
 
   @override
   Widget build(BuildContext context) {
-    final ScrollController scrollController = PrimaryScrollController.of(
-      context,
-    );
-
-    return NotificationListener<ScrollNotification>(
-      onNotification: (ScrollNotification notification) {
-        _onScroll();
-        return false;
-      },
-      child: SizedBox.expand(
-        child: Stack(
-          children: [
-            Image.network(
-              'https://images.unsplash.com/photo-1482049016688-2d3e1b311543',
-              width: double.infinity,
-              height: ProductTab0.kImageHeight,
-              cacheHeight: (ProductTab0.kImageHeight * 3).toInt(),
-              fit: BoxFit.cover,
-              color: Colors.black.withValues(alpha: _currentScrollProgress),
-              colorBlendMode: BlendMode.srcATop,
-            ),
-            Positioned.fill(child: SingleChildScrollView(child: const _Body())),
-          ],
+    return Provider<Product>(
+      create: (_) => generateProduct(),
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification notification) {
+          _onScroll();
+          return false;
+        },
+        child: SizedBox.expand(
+          child: Stack(
+            children: [
+              Builder(
+                builder: (context) {
+                  return Image.network(
+                    Provider.of<Product>(context).picture ?? '',
+                    width: double.infinity,
+                    height: ProductTab0.kImageHeight,
+                    cacheHeight: (ProductTab0.kImageHeight * 3).toInt(),
+                    fit: BoxFit.cover,
+                    color: Colors.black.withValues(
+                      alpha: _currentScrollProgress,
+                    ),
+                    colorBlendMode: BlendMode.srcATop,
+                  );
+                },
+              ),
+              Positioned.fill(
+                child: SingleChildScrollView(child: const _Body()),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -175,13 +183,19 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Product product = Provider.of<Product>(context);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Petits pois et carottes', style: context.theme.title1),
+        Consumer<Product>(
+          builder: (BuildContext context, Product product, _) {
+            return Text(product.name ?? '-', style: context.theme.title1);
+          },
+        ),
         const SizedBox(height: 3.0),
-        Text('Cassegrain', style: context.theme.title2),
+        Text(product.brands?.join(',') ?? '-', style: context.theme.title2),
         const SizedBox(height: 8.0),
       ],
     );
@@ -493,3 +507,21 @@ class _ProductBubble extends StatelessWidget {
 }
 
 enum _ProductBubbleValue { on, off }
+
+class ProductIW extends InheritedWidget {
+  const ProductIW({super.key, required this.product, required super.child});
+
+  final Product product;
+
+  static ProductIW of(BuildContext context) {
+    final ProductIW? result =
+        context.dependOnInheritedWidgetOfExactType<ProductIW>();
+    assert(result != null, 'No ProductIW found in context');
+    return result!;
+  }
+
+  @override
+  bool updateShouldNotify(ProductIW old) {
+    return product != old.product;
+  }
+}
