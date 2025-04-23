@@ -30,10 +30,13 @@ class Homepage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsetsDirectional.symmetric(horizontal: 10.0),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
-              SvgPicture.asset('res/svg/ill_empty.svg'),
-              SizedBox(height: height * 0.08),
+              Spacer(flex: 15),
+              Expanded(
+                flex: 70,
+                child: SvgPicture.asset('res/svg/ill_empty.svg'),
+              ),
+              Spacer(flex: 10),
               Padding(
                 padding: const EdgeInsetsDirectional.symmetric(
                   horizontal: 25.0,
@@ -47,30 +50,42 @@ class Homepage extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: height * 0.1),
-                    TextButton(
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.blue,
-                        backgroundColor: AppColors.yellow,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(22.0)),
-                        ),
-                      ),
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('Commencer'.toUpperCase()),
-                          const SizedBox(width: 8.0),
-                          Icon(Icons.arrow_right_alt),
-                        ],
-                      ),
-                    ),
+                    MyButton(label: 'Commencer'),
                   ],
                 ),
               ),
+              Spacer(flex: 15),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class MyButton extends StatelessWidget {
+  const MyButton({required this.label, super.key});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: AppColors.blue,
+        backgroundColor: AppColors.yellow,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(22.0)),
+        ),
+      ),
+      onPressed: () {},
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(child: Text(label.toUpperCase())),
+          const SizedBox(width: 8.0),
+          Icon(Icons.arrow_right_alt),
+        ],
       ),
     );
   }

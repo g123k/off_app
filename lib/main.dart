@@ -1,4 +1,5 @@
-import 'package:betclic_app/ui/homepage/homepage.dart';
+import 'package:betclic_app/style.dart';
+import 'package:betclic_app/ui/details/product_details.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,8 +18,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Avenir',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        extensions: [OffThemeExtension.defaultValues()],
       ),
-      home: Homepage(),
+      home: const ProductDetails(),
     );
   }
 }
