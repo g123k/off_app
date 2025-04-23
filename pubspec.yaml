@@ -35,6 +35,8 @@ flutter:
       fonts:
         - asset: res/fonts/Avenir-Light.ttf
           weight: 300
+        - asset: res/fonts/Avenir-Regular.ttf
+          weight: 400
         - asset: res/fonts/Avenir-Medium.ttf
           weight: 500
         - asset: res/fonts/Avenir-Black.ttf
