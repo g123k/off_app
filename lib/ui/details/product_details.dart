@@ -1,20 +1,67 @@
 import 'package:betclic_app/res/app_icons.dart';
+import 'package:betclic_app/ui/bloc/product_bloc.dart';
 import 'package:betclic_app/ui/details/product_tab0.dart';
 import 'package:betclic_app/ui/details/product_tab1.dart';
 import 'package:betclic_app/ui/details/product_tab2.dart';
 import 'package:betclic_app/ui/details/product_tab3.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProductDetails extends StatefulWidget {
+class ProductDetails extends StatelessWidget {
   const ProductDetails({required this.barcode, super.key});
 
   final String barcode;
 
   @override
-  State<ProductDetails> createState() => _ProductDetailsState();
+  Widget build(BuildContext context) {
+    return BlocProvider<ProductBloc>(
+      create: (_) => ProductBloc(barcode),
+      lazy: false,
+      child: BlocBuilder<ProductBloc, ProductState>(
+        builder: (BuildContext context, ProductState state) {
+          return switch (state) {
+            LoadingProductState() => const _ProductDetailsLoading(),
+            SuccessProductState() => const _ProductDetailsBody(),
+            ErrorProductState() => const _ProductDetailsError(),
+          };
+        },
+      ),
+    );
+  }
 }
 
-class _ProductDetailsState extends State<ProductDetails> {
+class _ProductDetailsLoading extends StatelessWidget {
+  const _ProductDetailsLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: Center(child: CircularProgressIndicator()));
+  }
+}
+
+class _ProductDetailsError extends StatelessWidget {
+  const _ProductDetailsError();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text(
+          'Erreur ${(BlocProvider.of<ProductBloc>(context).state as ErrorProductState).error}',
+        ),
+      ),
+    );
+  }
+}
+
+class _ProductDetailsBody extends StatefulWidget {
+  const _ProductDetailsBody();
+
+  @override
+  State<_ProductDetailsBody> createState() => _ProductDetailsBodyState();
+}
+
+class _ProductDetailsBodyState extends State<_ProductDetailsBody> {
   late ProductDetailsCurrentTab currentTab;
 
   @override
@@ -28,21 +75,30 @@ class _ProductDetailsState extends State<ProductDetails> {
     return Scaffold(
       body: Stack(
         children: [
-          Offstage(
-            offstage: currentTab != ProductDetailsCurrentTab.summary,
-            child: Positioned.fill(child: ProductTab0()),
+          Positioned.fill(
+            child: Offstage(
+              offstage: currentTab != ProductDetailsCurrentTab.summary,
+              child: ProductTab0(),
+            ),
           ),
-          Offstage(
-            offstage: currentTab != ProductDetailsCurrentTab.info,
-            child: Positioned.fill(child: ProductTab1()),
+          Positioned.fill(
+            child: Offstage(
+              offstage: currentTab != ProductDetailsCurrentTab.info,
+              child: ProductTab1(),
+            ),
           ),
-          Offstage(
-            offstage: currentTab != ProductDetailsCurrentTab.nutrition,
-            child: Positioned.fill(child: ProductTab2()),
+          Positioned.fill(
+            child: Offstage(
+              offstage: currentTab != ProductDetailsCurrentTab.nutrition,
+              child: ProductTab2(),
+            ),
           ),
-          Offstage(
-            offstage: currentTab != ProductDetailsCurrentTab.nutritionalValues,
-            child: Positioned.fill(child: ProductTab3()),
+          Positioned.fill(
+            child: Offstage(
+              offstage:
+                  currentTab != ProductDetailsCurrentTab.nutritionalValues,
+              child: ProductTab3(),
+            ),
           ),
         ],
       ),

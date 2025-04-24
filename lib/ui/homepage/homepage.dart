@@ -3,6 +3,7 @@ import 'package:betclic_app/res/app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -18,7 +19,28 @@ class Homepage extends StatelessWidget {
         actions: [
           IconButton(
             tooltip: 'Scanner un code-barres',
-            onPressed: () {},
+            onPressed: () async {
+              String? barcode = await SimpleBarcodeScanner.scanBarcode(
+                context,
+                barcodeAppBar: const BarcodeAppBar(
+                  appBarTitle: 'Test',
+                  centerTitle: false,
+                  enableBackButton: true,
+                  backButtonIcon: Icon(Icons.arrow_back_ios),
+                ),
+                isShowFlashIcon: true,
+                delayMillis: 2000,
+                cameraFace: CameraFace.front,
+              );
+
+              if (!context.mounted) {
+                return;
+              }
+
+              if (barcode?.isNotEmpty == true) {
+                openDetails(context, barcode!);
+              }
+            },
             icon: Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: Icon(AppIcons.barcode),
@@ -53,9 +75,7 @@ class Homepage extends StatelessWidget {
                     SizedBox(height: height * 0.1),
                     MyButton(
                       label: 'Commencer',
-                      onPressed: () {
-                        GoRouter.of(context).push('/product?barcode=123');
-                      },
+                      onPressed: () => openDetails(context, '123'),
                     ),
                   ],
                 ),
@@ -67,6 +87,9 @@ class Homepage extends StatelessWidget {
       ),
     );
   }
+
+  void openDetails(BuildContext context, String barcode) =>
+      GoRouter.of(context).push('/product?barcode=$barcode');
 }
 
 class MyButton extends StatelessWidget {
