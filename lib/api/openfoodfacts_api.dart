@@ -14,7 +14,11 @@ abstract class OpenFoodFactsAPI {
   Future<ProductAPIEntity> loadProduct(@Query('barcode') String barcode);
 }
 
-class OpenFoodFactsAPIManager {
+abstract class IAPIManager {
+  Future<ProductAPIEntity> loadProduct(String barcode);
+}
+
+class OpenFoodFactsAPIManager implements IAPIManager {
   factory OpenFoodFactsAPIManager() {
     _instance ??= OpenFoodFactsAPIManager._();
     return _instance!;

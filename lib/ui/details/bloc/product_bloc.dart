@@ -2,6 +2,7 @@ import 'package:betclic_app/api/model/product_response.dart';
 import 'package:betclic_app/api/openfoodfacts_api.dart';
 import 'package:betclic_app/model/product.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 abstract class ProductEvent {}
 
@@ -24,7 +25,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     emitter(LoadingProductState());
 
     try {
-      ProductAPIEntity resp = await OpenFoodFactsAPIManager().loadProduct(
+      ProductAPIEntity resp = await GetIt.instance<IAPIManager>().loadProduct(
         event.barcode,
       );
 
