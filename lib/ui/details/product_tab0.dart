@@ -1,8 +1,8 @@
 import 'package:betclic_app/model/product.dart';
-import 'package:betclic_app/res/app_colors.dart';
-import 'package:betclic_app/res/app_icons.dart';
 import 'package:betclic_app/style.dart';
 import 'package:betclic_app/ui/details/bloc/product_bloc.dart';
+import 'package:betclic_app/ui/res/app_colors.dart';
+import 'package:betclic_app/ui/res/app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

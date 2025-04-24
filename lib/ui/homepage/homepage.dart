@@ -1,6 +1,6 @@
-import 'package:betclic_app/res/app_icons.dart';
 import 'package:betclic_app/ui/components/button.dart';
 import 'package:betclic_app/ui/homepage/homepage_bloc.dart';
+import 'package:betclic_app/ui/res/app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
