@@ -1,5 +1,5 @@
 import 'package:betclic_app/res/app_icons.dart';
-import 'package:betclic_app/ui/bloc/product_bloc.dart';
+import 'package:betclic_app/ui/details/bloc/product_bloc.dart';
 import 'package:betclic_app/ui/details/product_tab0.dart';
 import 'package:betclic_app/ui/details/product_tab1.dart';
 import 'package:betclic_app/ui/details/product_tab2.dart';

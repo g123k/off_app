@@ -2,9 +2,10 @@ import 'package:betclic_app/model/product.dart';
 import 'package:betclic_app/res/app_colors.dart';
 import 'package:betclic_app/res/app_icons.dart';
 import 'package:betclic_app/style.dart';
-import 'package:betclic_app/ui/bloc/product_bloc.dart';
+import 'package:betclic_app/ui/details/bloc/product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductTab0 extends StatefulWidget {
   static const double kImageHeight = 300.0;
@@ -36,6 +37,10 @@ class _ProductTab0State extends State<ProductTab0> {
 
   @override
   Widget build(BuildContext context) {
+    final ScrollController scrollController = PrimaryScrollController.of(
+      context,
+    );
+
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification notification) {
         _onScroll();
@@ -57,7 +62,19 @@ class _ProductTab0State extends State<ProductTab0> {
                 );
               },
             ),
-            Positioned.fill(child: SingleChildScrollView(child: const _Body())),
+            Positioned.fill(
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: const _Body(),
+              ),
+            ),
+            PositionedDirectional(
+              child: _HeaderIcon(
+                icon: Icons.adaptive.arrow_back,
+                tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+                onPressed: GoRouter.of(context).pop,
+              ),
+            ),
           ],
         ),
       ),
@@ -114,14 +131,20 @@ class _HeaderIconState extends State<_HeaderIcon> {
               onTap: widget.onPressed ?? () {},
               customBorder: const CircleBorder(),
               child: Ink(
-                padding: const EdgeInsetsDirectional.all(15.0),
+                padding: const EdgeInsetsDirectional.only(
+                  start: 18.0,
+                  end: 12.0,
+                  top: 15.0,
+                  bottom: 15.0,
+                ),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Theme.of(
-                    context,
-                  ).primaryColorLight.withValues(alpha: _opacity),
+                  color: Colors.white.withValues(alpha: _opacity),
                 ),
-                child: Icon(widget.icon, color: Colors.white),
+                child: Icon(
+                  widget.icon,
+                  color: Color.lerp(Colors.white, Colors.black, _opacity),
+                ),
               ),
             ),
           ),
