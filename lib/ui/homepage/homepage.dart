@@ -1,16 +1,56 @@
+import 'package:betclic_app/res/app_icons.dart';
 import 'package:betclic_app/ui/components/button.dart';
 import 'package:betclic_app/ui/homepage/homepage_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return _EmptyHomePage();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Mes scans'),
+        centerTitle: false,
+        actions: [
+          IconButton(
+            tooltip: 'Scanner un code-barres',
+            onPressed: () async {
+              String? barcode = await SimpleBarcodeScanner.scanBarcode(
+                context,
+                barcodeAppBar: const BarcodeAppBar(
+                  appBarTitle: 'Test',
+                  centerTitle: false,
+                  enableBackButton: true,
+                  backButtonIcon: Icon(Icons.arrow_back_ios),
+                ),
+                isShowFlashIcon: true,
+                delayMillis: 2000,
+                cameraFace: CameraFace.front,
+              );
+
+              if (!context.mounted) {
+                return;
+              }
+
+              if (barcode?.isNotEmpty == true) {
+                _openDetails(context, barcode!);
+              }
+            },
+            icon: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Icon(AppIcons.barcode),
+            ),
+          ),
+        ],
+        backgroundColor: Colors.white,
+      ),
+      body: _EmptyHomePage(),
+    );
   }
 }
 
@@ -72,10 +112,7 @@ class _HomePageHistory extends StatelessWidget {
 }
 
 void _openDetails(BuildContext context, String barcode) {
-  BlocProvider.of<HomepageBloc>(
-    context,
-    listen: false,
-  ).add(AddProductToHistoryEvent(barcode));
+  // TODO
 
   GoRouter.of(context).push('/product?barcode=$barcode');
 }

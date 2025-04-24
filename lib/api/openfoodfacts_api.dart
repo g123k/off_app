@@ -34,6 +34,7 @@ class OpenFoodFactsAPIManager implements IAPIManager {
         baseUrl: 'https://api.formation-android.fr/v2/',
       );
 
+  @override
   Future<ProductAPIEntity> loadProduct(String barcode) =>
       _api.loadProduct(barcode);
 }
