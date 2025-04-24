@@ -12,50 +12,61 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Mes scans'),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            tooltip: 'Scanner un code-barres',
-            onPressed: () async {
-              String? barcode = await SimpleBarcodeScanner.scanBarcode(
-                context,
-                barcodeAppBar: const BarcodeAppBar(
-                  appBarTitle: 'Test',
-                  centerTitle: false,
-                  enableBackButton: true,
-                  backButtonIcon: Icon(Icons.arrow_back_ios),
-                ),
-                isShowFlashIcon: true,
-                delayMillis: 2000,
-                cameraFace: CameraFace.front,
-              );
+    return BlocProvider<HomepageBloc>(
+      create: (_) => HomepageBloc(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Mes scans'),
+          centerTitle: false,
+          actions: [
+            IconButton(
+              tooltip: 'Scanner un code-barres',
+              onPressed: () async {
+                String? barcode = await SimpleBarcodeScanner.scanBarcode(
+                  context,
+                  barcodeAppBar: const BarcodeAppBar(
+                    appBarTitle: 'Test',
+                    centerTitle: false,
+                    enableBackButton: true,
+                    backButtonIcon: Icon(Icons.arrow_back_ios),
+                  ),
+                  isShowFlashIcon: true,
+                  delayMillis: 2000,
+                  cameraFace: CameraFace.front,
+                );
 
-              if (!context.mounted) {
-                return;
-              }
+                if (!context.mounted) {
+                  return;
+                }
 
-              if (barcode?.isNotEmpty == true) {
-                _openDetails(context, barcode!);
-              }
-            },
-            icon: Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Icon(AppIcons.barcode),
+                if (barcode?.isNotEmpty == true) {
+                  _openDetails(context, barcode!);
+                }
+              },
+              icon: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Icon(AppIcons.barcode),
+              ),
             ),
-          ),
-        ],
-        backgroundColor: Colors.white,
+          ],
+          backgroundColor: Colors.white,
+        ),
+        body: BlocBuilder<HomepageBloc, List<String>>(
+          builder: (BuildContext context, List<String> history) {
+            if (history.isEmpty) {
+              return _EmptyHomePage();
+            } else {
+              return _HomePageHistory();
+            }
+          },
+        ),
       ),
-      body: _EmptyHomePage(),
     );
   }
 }
 
 class _EmptyHomePage extends StatelessWidget {
-  const _EmptyHomePage();
+  const _EmptyHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -99,20 +110,43 @@ class _EmptyHomePage extends StatelessWidget {
 }
 
 class _HomePageHistory extends StatelessWidget {
-  const _HomePageHistory();
+  const _HomePageHistory({super.key});
 
   @override
   Widget build(BuildContext context) {
     final List<String> history =
         BlocProvider.of<HomepageBloc>(context, listen: true).state;
 
-    // TODO
-    return SizedBox.shrink();
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: history.length,
+            itemBuilder: (BuildContext context, int position) {
+              final String barcode = history[position];
+
+              return ListTile(
+                title: Text(barcode),
+                trailing: Icon(Icons.arrow_forward),
+                onTap: () => _openDetails(context, barcode),
+              );
+            },
+          ),
+        ),
+        MyButton(
+          label: 'Commencer',
+          onPressed: () => _openDetails(context, '123456'),
+        ),
+      ],
+    );
   }
 }
 
 void _openDetails(BuildContext context, String barcode) {
-  // TODO
+  BlocProvider.of<HomepageBloc>(
+    context,
+    listen: false,
+  ).add(AddProductToHistoryEvent(barcode));
 
   GoRouter.of(context).push('/product?barcode=$barcode');
 }

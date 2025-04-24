@@ -26,13 +26,14 @@ class HomepageBloc extends Bloc<HomepageEvent, List<String>> {
     AddProductToHistoryEvent event,
     Emitter<List<String>> emitter,
   ) async {
-    // TODO
+    await _storage.addBarcodeToHistory(event.barcode);
+    add(LoadHistoryEvent());
   }
 
   Future<void> _loadHistory(
     LoadHistoryEvent event,
     Emitter<List<String>> emitter,
   ) async {
-    // TODO
+    emitter(await _storage.loadHistory());
   }
 }

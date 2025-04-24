@@ -17,6 +17,9 @@ dependencies:
   flutter_bloc: 9.1.0
   freezed: 3.0.6
 
+  flutter_riverpod: 2.6.1
+  riverpod_annotation: 2.6.1
+
   dio: 5.8.0+1
   retrofit: 4.4.2
   json_annotation: 4.9.0
@@ -30,16 +33,20 @@ dependencies:
   synchronized: 3.3.1
 
   simple_barcode_scanner: 0.3.0
-  freezed_annotation: ^3.0.0
+  freezed_annotation: 3.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^5.0.0
-  build_runner: ^2.4.15
+  flutter_lints: 5.0.0
+  build_runner: 2.4.15
   retrofit_generator: any
   json_serializable: any
+
+  custom_lint: 0.7.5
+  riverpod_lint: 2.6.5
+  riverpod_generator: 2.6.5
 
 
 flutter:

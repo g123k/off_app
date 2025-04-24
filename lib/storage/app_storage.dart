@@ -24,7 +24,10 @@ class HiveAppStorage extends IAppStorage {
   @override
   Future<bool> addBarcodeToHistory(String barcode) async {
     return dbLock.synchronized(() async {
-      // TODO
+      final List<String> history = _loadHistoryInternal();
+      history.remove(barcode);
+      history.insert(0, barcode);
+      await box.put('history', history);
       return true;
     });
   }
@@ -37,7 +40,6 @@ class HiveAppStorage extends IAppStorage {
   }
 
   List<String> _loadHistoryInternal() {
-    // TODO
-    return [];
+    return box.get('history', defaultValue: []) ?? <String>[];
   }
 }
