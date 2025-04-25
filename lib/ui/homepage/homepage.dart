@@ -66,7 +66,7 @@ class HomePage extends StatelessWidget {
 }
 
 class _EmptyHomePage extends StatelessWidget {
-  const _EmptyHomePage({super.key});
+  const _EmptyHomePage();
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +110,7 @@ class _EmptyHomePage extends StatelessWidget {
 }
 
 class _HomePageHistory extends StatelessWidget {
-  const _HomePageHistory({super.key});
+  const _HomePageHistory();
 
   @override
   Widget build(BuildContext context) {
